@@ -1,0 +1,21 @@
+group 'de.lukaskoerfer.gradle'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'groovy'
+apply plugin: 'maven'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile localGroovy()
+    compile gradleApi()
+    compileOnly 'org.projectlombok:lombok:1.16.18'
+}
+
+uploadArchives {
+    repositories {
+        mavenLocal()
+    }
+}
