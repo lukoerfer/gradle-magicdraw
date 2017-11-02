@@ -6,22 +6,16 @@ import org.gradle.api.InvalidUserDataException
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 
-class PluginDescriptor extends DefaultTask {
+class MdPluginDescriptor extends DefaultTask {
 
     @OutputFile
     File file = new File(temporaryDir, 'plugin.xml')
 
-    Map<String, ?> plugin = [
-        id: project.group ?: 'unknown',
-        name: project.name,
-        version: project.version,
-        class: null,
-        'provider-name': System.getProperty('user.name')
-    ]
+    Map<String, Object> plugin = [:]
 
     Object requiredApi = 1.0
 
-    List<Map<String, ?>> requiredPlugins = []
+    List<Map<String, Object>> requiredPlugins = []
 
     List<String> libraries = []
 
