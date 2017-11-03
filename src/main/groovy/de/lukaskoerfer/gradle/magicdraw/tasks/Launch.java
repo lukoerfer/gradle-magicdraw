@@ -14,7 +14,7 @@ import java.util.List;
 
 import static de.lukaskoerfer.gradle.magicdraw.util.FileUtil.*;
 
-public class MdLaunch extends JavaExec {
+public class Launch extends JavaExec {
     
     @Getter @Setter
     private boolean verbose = true;
@@ -25,7 +25,7 @@ public class MdLaunch extends JavaExec {
     @Getter @Setter
     private List<File> pluginDirs = new ArrayList<>();
     
-    public MdLaunch() {
+    public Launch() {
         Project project = getProject();
         JavaPluginConvention java = project.getConvention()
             .getPlugin(JavaPluginConvention.class);
@@ -44,7 +44,7 @@ public class MdLaunch extends JavaExec {
         MagicDrawExtension magicDraw = project.getExtensions()
             .getByType(MagicDrawExtension.class);
         File root = magicDraw.getInstallDir();
-        // Specify installation directory
+        // Specify configuration properties
         if (verbose) args("-verbose");
         systemProperty("localConfig", localConfig);
         systemProperty("com.nomagic.osgi.config.dir", file(root, "configuration"));
@@ -54,7 +54,7 @@ public class MdLaunch extends JavaExec {
         Copy assemblePlugin = project.getTasks()
             .withType(Copy.class).getAt("assemblePlugin");
         dependsOn(assemblePlugin);
-        pluginDirs.add(assemblePlugin.getDestinationDir());
+        pluginDirs.add(assemblePlugin.getDestinationDir().getParentFile());
         pluginDirs.add(file(root, "plugins"));
         systemProperty("md.plugins.dir", stringify(pluginDirs));
     }

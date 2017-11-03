@@ -1,88 +1,72 @@
 package de.lukaskoerfer.gradle.magicdraw;
 
 import de.lukaskoerfer.gradle.magicdraw.extensions.MagicDrawExtension;
-import de.lukaskoerfer.gradle.magicdraw.extensions.MdPluginExtension;
-import de.lukaskoerfer.gradle.magicdraw.tasks.MdLaunch;
-import de.lukaskoerfer.gradle.magicdraw.tasks.MdPluginDescriptor;
+import de.lukaskoerfer.gradle.magicdraw.tasks.AssemblePlugin;
+import de.lukaskoerfer.gradle.magicdraw.tasks.Launch;
 import groovy.lang.GroovyCallable;
 import org.gradle.api.InvalidUserCodeException;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.tasks.Copy;
 import org.gradle.api.tasks.Delete;
-import org.gradle.api.tasks.JavaExec;
 import org.gradle.jvm.tasks.Jar;
 
+import java.util.Map;
 import java.util.stream.Stream;
 
-import static de.lukaskoerfer.gradle.magicdraw.util.FileUtil.*;
+import static de.lukaskoerfer.gradle.magicdraw.util.FileUtil.file;
 
 @SuppressWarnings("unused")
 public class MagicDrawPlugin implements Plugin<Project> {
-
-    private MagicDrawExtension magicDraw;
-    private MdPluginExtension plugin;
-
-    private MdPluginDescriptor pluginDescriptor;
-    private Copy assemblePlugin;
-    private Copy installPlugin;
-    private Delete uninstallPlugin;
-    private JavaExec launch;
-
+    
     @Override
     public void apply(Project project) {
         // Plugin checks
         if (!project.getPluginManager().hasPlugin("java")) {
             throw new InvalidUserCodeException("The MagicDraw plugin requires the Java plugin!");
         }
-        // Extend project scope
-        magicDraw = project.getExtensions()
+        // Register magic draw extension
+        MagicDrawExtension magicDraw = project.getExtensions()
             .create("magicDraw", MagicDrawExtension.class, project);
-        plugin = project.getExtensions()
-            .create("plugin", MdPluginExtension.class, project);
+        // Create configurations
+        Configuration mdCompile = project.getConfigurations().create("mdCompile");
+        project.getConfigurations().getAt("compile").extendsFrom(mdCompile);
+        Configuration mdRuntime = project.getConfigurations().create("mdRuntime");
+        project.getConfigurations().getAt("runtime").extendsFrom(mdRuntime);
         // Create tasks
-        pluginDescriptor = project.getTasks()
-            .create("pluginDescriptor", MdPluginDescriptor.class);
-        pluginDescriptor.setDescription("Creates a MagicDraw plugin tasks file");
-        assemblePlugin = project.getTasks()
-            .create("assemblePlugin", Copy.class);
-        assemblePlugin.setDescription("Assembles all MagicDraw plugin components of this project");
-        installPlugin = project.getTasks()
+        AssemblePlugin assemblePlugin = project.getTasks()
+            .create("assemblePlugin", AssemblePlugin.class);
+        assemblePlugin.setDescription("Assembles all MagicDraw plugin components in this project");
+        Copy installPlugin = project.getTasks()
             .create("installPlugin", Copy.class);
         installPlugin.setDescription("Installs this MagicDraw plugin into the local instance");
-        uninstallPlugin = project.getTasks()
+        Delete uninstallPlugin = project.getTasks()
             .create("uninstallPlugin", Delete.class);
         uninstallPlugin.setDescription("Removes this MagicDraw plugin from the local instance");
-        launch = project.getTasks()
-            .create("launch", MdLaunch.class);
+        Launch launch = project.getTasks()
+            .create("launch", Launch.class);
         launch.setDescription("Launches MagicDraw with this plugin");
+        // Register plugin map as project extension
+        Map plugin = assemblePlugin.getPlugin();
+        project.getExtensions().add("plugin", plugin);
         // Add all tasks to group
-        Stream.of(pluginDescriptor, assemblePlugin, installPlugin, uninstallPlugin, launch)
+        Stream.of(assemblePlugin, installPlugin, uninstallPlugin, launch)
             .forEach(task -> task.setGroup("MagicDraw"));
-        // Apply task configuration
-        connectTasks(project);
-    }
-
-    private void connectTasks(Project project) {
+        // Configure assemble task
         Jar jar = project.getTasks().withType(Jar.class).getAt("jar");
-        // Configure pluginDescriptor
-        project.afterEvaluate($ ->
-            pluginDescriptor.getLibraries().add(jar.getArchiveName())
-        );
-        // Configure assemblePlugin task
-        assemblePlugin.into(file(project.getBuildDir(), "magicDraw"));
-        assemblePlugin.into((GroovyCallable) () -> plugin.getId(), copy ->
-            copy.from(pluginDescriptor, jar)
-        );
-        // Configure installPlugin task
+        GroovyCallable assembleTarget = () ->
+            file(project.getBuildDir(), "magicDraw", plugin.get("id"));
+        assemblePlugin.from(jar);
+        assemblePlugin.exclude(element -> mdCompile.contains(element.getFile()));
+        assemblePlugin.exclude(element -> mdRuntime.contains(element.getFile()));
+        assemblePlugin.into(assembleTarget);
+        // Configure installation tasks
+        GroovyCallable installationTarget = () ->
+            file(magicDraw.getInstallDir(), "plugins", plugin.get("id"));
         installPlugin.from(assemblePlugin);
-        installPlugin.into((GroovyCallable)() ->
-            file(magicDraw.getInstallDir(), "plugins")
-        );
-        // Configure uninstallPlugin task
-        uninstallPlugin.delete((GroovyCallable)() ->
-            file(magicDraw.getInstallDir(), "plugins", plugin.getId())
-        );
+        installPlugin.into(installationTarget);
+        uninstallPlugin.delete(installationTarget);
     }
 
 }
