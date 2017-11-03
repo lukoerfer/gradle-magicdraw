@@ -54,8 +54,8 @@ public class Launch extends JavaExec {
         Copy assemblePlugin = project.getTasks()
             .withType(Copy.class).getAt("assemblePlugin");
         dependsOn(assemblePlugin);
-        pluginDirs.add(assemblePlugin.getDestinationDir().getParentFile());
         pluginDirs.add(file(root, "plugins"));
+        pluginDirs.add(assemblePlugin.getDestinationDir().getParentFile());
         systemProperty("md.plugins.dir", stringify(pluginDirs));
     }
     

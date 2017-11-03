@@ -56,7 +56,7 @@ class AssemblePlugin extends Copy {
                     }
                     'runtime' {
                         libraries.each {
-                            'library'(path: it)
+                            'library'(name: it)
                         }
                     }
                 }
