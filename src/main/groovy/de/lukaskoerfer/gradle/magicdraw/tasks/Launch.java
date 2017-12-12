@@ -14,14 +14,26 @@ import java.util.List;
 
 import static de.lukaskoerfer.gradle.magicdraw.util.FileUtil.*;
 
+/**
+ * Task type to launch a MagicDraw instance
+ */
 public class Launch extends JavaExec {
     
+    /**
+     * Whether MagicDraw should be launched in verbose mode (more detailed console output)
+     */
     @Getter @Setter
     private boolean verbose = true;
     
+    /**
+     * Whether MagicDraw should be launched with a local configuration file
+     */
     @Getter @Setter
     private boolean localConfig = true;
     
+    /**
+     * A list of directories where MagicDraw should search for plugins
+     */
     @Getter @Setter
     private List<File> pluginDirs = new ArrayList<>();
     

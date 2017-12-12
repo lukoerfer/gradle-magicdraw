@@ -8,6 +8,7 @@ import org.gradle.api.InvalidUserCodeException;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
+import org.gradle.api.distribution.DistributionContainer;
 import org.gradle.api.tasks.Copy;
 import org.gradle.api.tasks.Delete;
 import org.gradle.jvm.tasks.Jar;
@@ -17,6 +18,9 @@ import java.util.stream.Stream;
 
 import static de.lukaskoerfer.gradle.magicdraw.util.FileUtil.file;
 
+/**
+ * The MagicDraw plugin
+ */
 @SuppressWarnings("unused")
 public class MagicDrawPlugin implements Plugin<Project> {
     
@@ -67,6 +71,10 @@ public class MagicDrawPlugin implements Plugin<Project> {
         installPlugin.from(assemblePlugin);
         installPlugin.into(installationTarget);
         uninstallPlugin.delete(installationTarget);
+        // Setup distribution plugin
+        project.getPluginManager().withPlugin("distribution", appliedPlugin ->
+            project.getExtensions().getByType(DistributionContainer.class)
+                .getByName("main").getContents().from(assemblePlugin));
     }
 
 }

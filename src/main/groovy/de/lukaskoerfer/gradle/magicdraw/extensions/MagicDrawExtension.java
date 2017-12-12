@@ -12,10 +12,18 @@ import java.util.Optional;
 
 import static de.lukaskoerfer.gradle.magicdraw.util.FileUtil.file;
 
+/**
+ * Provides a project extension for general MagicDraw settings
+ */
 public class MagicDrawExtension {
     
     private static final String INSTALL_DIR_PROPERTY = "magicDraw.installDir";
     
+    /**
+     * The MagicDraw installation directory
+     * <p>
+     * A default value can be set via the project project 'magicDraw.installDir'.
+     */
     @Getter @Setter
     private File installDir;
 

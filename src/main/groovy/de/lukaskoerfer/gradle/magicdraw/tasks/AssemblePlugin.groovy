@@ -1,11 +1,16 @@
 package de.lukaskoerfer.gradle.magicdraw.tasks
 
+import groovy.transform.CompileStatic
 import groovy.xml.MarkupBuilder
 import org.gradle.api.InvalidUserDataException
-import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.Sync
 
-class AssemblePlugin extends Copy {
+/**
+ * Task type to assemble all components of a MagicDraw plugin and create the descriptor file
+ */
+@CompileStatic
+class AssemblePlugin extends Sync {
 
     @OutputFile
     File file
@@ -17,8 +22,10 @@ class AssemblePlugin extends Copy {
     List<Map> requiredPlugins = []
 
     AssemblePlugin() {
+        // Ensure execution of task
+        onlyIf { true }
+        // Validate model
         project.afterEvaluate {
-            // Validate model
             def missing = { throw new InvalidUserDataException("Missing plugin property $it") }
             plugin << [
                 id: plugin.id ?: project.group ?: missing('id'),
@@ -38,7 +45,8 @@ class AssemblePlugin extends Copy {
         // Create descriptor file
         doLast {
             // Setup XML writer
-            def xml = new MarkupBuilder(file.newWriter())
+            def writer = file.newWriter()
+            def xml = new MarkupBuilder(writer)
             xml.with {
                 doubleQuotes = true
                 omitEmptyAttributes = true
@@ -61,6 +69,8 @@ class AssemblePlugin extends Copy {
                     }
                 }
             }
+            // Close writer
+            writer.close()
         }
     }
 }
