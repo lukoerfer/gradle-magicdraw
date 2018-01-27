@@ -38,11 +38,11 @@ public class LaunchMagicDraw extends JavaExec {
     private List<File> pluginDirs = new ArrayList<>();
     
     public LaunchMagicDraw() {
-        applyDefaultValues();
-        getProject().afterEvaluate($ -> applyFinalValues());
+        preSetup();
+        getProject().afterEvaluate($ -> finalSetup());
     }
     
-    private void applyDefaultValues() {
+    private void preSetup() {
         setClasspath(buildClasspath());
         setMain("com.nomagic.osgi.launcher.ProductionFrameworkLauncher");
         setMinHeapSize("60M");
@@ -51,7 +51,7 @@ public class LaunchMagicDraw extends JavaExec {
         systemProperty("md.class.path", "$java.class.path");
     }
     
-    private void applyFinalValues() {
+    private void finalSetup() {
         MagicDrawExtension magicDraw = getProject().getExtensions()
             .getByType(MagicDrawExtension.class);
         File root = magicDraw.getInstallDir();
