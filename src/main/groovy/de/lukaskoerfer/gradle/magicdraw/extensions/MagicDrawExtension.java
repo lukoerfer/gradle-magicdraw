@@ -8,7 +8,6 @@ import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.file.FileTree;
 
 import java.io.File;
-import java.util.Optional;
 
 import static de.lukaskoerfer.gradle.magicdraw.util.FileUtil.file;
 
@@ -35,10 +34,13 @@ public class MagicDrawExtension {
     }
     
     private void afterEvaluate(Project project) {
-        // Validate extension
-        Optional.ofNullable(installDir)
-            .orElseThrow(InvalidUserDataException::new);
-        // Register dependencies
+        if (installDir == null) {
+            throw new InvalidUserDataException("Missing MagicDraw installation directory");
+        }
+        registerMagicDrawDependencies(project);
+    }
+    
+    private void registerMagicDrawDependencies(Project project) {
         Configuration mdCompile = project.getConfigurations()
             .getByName("mdCompile");
         FileTree dependencies = project.fileTree(
