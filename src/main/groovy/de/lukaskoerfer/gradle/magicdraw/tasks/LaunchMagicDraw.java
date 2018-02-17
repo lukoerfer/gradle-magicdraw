@@ -1,5 +1,6 @@
 package de.lukaskoerfer.gradle.magicdraw.tasks;
 
+import de.lukaskoerfer.gradle.magicdraw.MagicDrawPlugin;
 import de.lukaskoerfer.gradle.magicdraw.extensions.MagicDrawExtension;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,6 +8,7 @@ import org.gradle.api.file.FileCollection;
 import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.tasks.Copy;
 import org.gradle.api.tasks.JavaExec;
+import org.gradle.api.tasks.SourceSet;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -63,7 +65,7 @@ public class LaunchMagicDraw extends JavaExec {
         systemProperty("logback.configurationFile", file(root, "data", "logback.xml"));
         // Specify plugin directories
         Copy assemblePlugin = getProject().getTasks()
-            .withType(Copy.class).getAt("assemblePlugin");
+            .withType(Copy.class).getAt(MagicDrawPlugin.ASSEMBLE_PLUGIN_TASK_NAME);
         dependsOn(assemblePlugin);
         pluginDirs.add(file(root, "plugins"));
         pluginDirs.add(assemblePlugin.getDestinationDir().getParentFile());
@@ -73,7 +75,8 @@ public class LaunchMagicDraw extends JavaExec {
     private FileCollection buildClasspath() {
         JavaPluginConvention java = getProject().getConvention()
             .getPlugin(JavaPluginConvention.class);
-        return java.getSourceSets().getAt("main").getRuntimeClasspath();
+        return java.getSourceSets().getAt(SourceSet.MAIN_SOURCE_SET_NAME)
+            .getRuntimeClasspath();
     }
     
 }

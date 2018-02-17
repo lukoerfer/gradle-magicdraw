@@ -1,8 +1,10 @@
-group 'de.lukaskoerfer.gradle'
-version '1.0'
+plugins {
+    id 'groovy'
+    id 'com.gradle.plugin-publish' version '0.9.10'
+}
 
-apply plugin: 'groovy'
-apply plugin: 'maven'
+group 'de.lukaskoerfer.gradle'
+version '0.1'
 
 repositories {
     mavenCentral()
@@ -14,8 +16,18 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.16.18'
 }
 
-uploadArchives {
-    repositories {
-        mavenLocal()
+pluginBundle {
+    vcsUrl = '<uri to project source repository>'
+    plugins {
+        magicDrawPlugin {
+            id = 'de.lukaskoerfer.gradle.magicdraw'
+            displayName = 'MagicDraw Plugin'
+            description = '<Good human-readable description of what your plugin is about>'
+            tags = ['magicDraw', 'plugin']
+        }
     }
+}
+
+wrapper {
+    gradleVersion "4.5"
 }
