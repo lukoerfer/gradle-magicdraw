@@ -1,5 +1,6 @@
 package de.lukaskoerfer.gradle.magicdraw.extensions;
 
+import de.lukaskoerfer.gradle.magicdraw.MagicDrawPlugin;
 import lombok.Getter;
 import lombok.Setter;
 import org.gradle.api.InvalidUserDataException;
@@ -41,13 +42,13 @@ public class MagicDrawExtension {
     }
     
     private void registerMagicDrawDependencies(Project project) {
-        Configuration mdCompile = project.getConfigurations()
-            .getByName("mdCompile");
+        Configuration magicDrawConfiguration = project.getConfigurations()
+            .getByName(MagicDrawPlugin.MAGICDRAW_CONFIGURATION);
         FileTree dependencies = project.fileTree(
             file(installDir, "lib"),
             tree -> tree.include("**/*.jar")
         );
-        project.getDependencies().add(mdCompile.getName(), dependencies);
+        project.getDependencies().add(magicDrawConfiguration.getName(), dependencies);
     }
     
 }
