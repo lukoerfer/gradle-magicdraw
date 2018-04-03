@@ -15,13 +15,12 @@ class DescriptorEvaluation {
 
     void evaluate() {
         def missing = { throw new InvalidUserDataException("Missing plugin descriptor property $it") }
-        def plugin = descriptor.plugin
-        plugin << [
-            id: plugin.id ?: project.group ?: missing('id'),
-            name: plugin.name ?:  project.name ?: missing('name'),
-            version: plugin.version ?: project.version ?: missing('version'),
-            class: plugin.class ?: missing('class'),
-            'provider-name': plugin.'provider-name' ?: System.getProperty('user.name')
+        descriptor.plugin << [
+            id: descriptor.plugin.id ?: project.group ?: missing('id'),
+            name: descriptor.plugin.name ?:  project.name ?: missing('name'),
+            version: descriptor.plugin.version ?: project.version ?: missing('version'),
+            class: descriptor.plugin.class ?: missing('class'),
+            'provider-name': descriptor.plugin.'provider-name' ?: System.getProperty('user.name')
         ]
     }
 

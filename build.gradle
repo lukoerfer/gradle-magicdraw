@@ -17,10 +17,10 @@ dependencies {
 }
 
 pluginBundle {
-    website = ''
-    vcsUrl = '<uri to project source repository>'
+    website = 'https://github.com/lukoerfer/gradle-magicdraw'
+    vcsUrl = 'https://github.com/lukoerfer/gradle-magicdraw'
     plugins {
-        magicDrawPlugin {
+        plugin {
             id = 'de.lukaskoerfer.gradle.magicdraw'
             displayName = 'MagicDraw Plugin'
             description = '<Good human-readable description of what your plugin is about>'
