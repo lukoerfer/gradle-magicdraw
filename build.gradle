@@ -7,7 +7,7 @@ group 'de.lukaskoerfer.gradle'
 version '0.1'
 
 repositories {
-    mavenCentral()
+    jcenter()
 }
 
 dependencies {
@@ -17,6 +17,7 @@ dependencies {
 }
 
 pluginBundle {
+    website = ''
     vcsUrl = '<uri to project source repository>'
     plugins {
         magicDrawPlugin {
@@ -29,5 +30,5 @@ pluginBundle {
 }
 
 wrapper {
-    gradleVersion "4.5"
+    gradleVersion '4.5'
 }
