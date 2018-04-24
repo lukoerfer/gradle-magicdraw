@@ -5,6 +5,9 @@ import groovy.transform.Immutable
 import org.gradle.api.InvalidUserDataException
 import org.gradle.api.Project
 
+/**
+ * Evaluates a MagicDraw plugin descriptor
+ */
 @CompileStatic
 @Immutable
 class DescriptorEvaluation {
@@ -13,8 +16,13 @@ class DescriptorEvaluation {
 
     private Descriptor descriptor
 
+    /**
+     * Executes the evaluation of the plugin descriptor
+     */
     void evaluate() {
-        def missing = { throw new InvalidUserDataException("Missing plugin descriptor property $it") }
+        def missing = {
+            throw new InvalidUserDataException("Missing plugin descriptor property $it")
+        }
         descriptor.plugin << [
             id: descriptor.plugin.id ?: project.group ?: missing('id'),
             name: descriptor.plugin.name ?:  project.name ?: missing('name'),

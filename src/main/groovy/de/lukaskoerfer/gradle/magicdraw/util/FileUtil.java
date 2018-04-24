@@ -4,19 +4,33 @@ import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Provides some static utility functions for files
+ */
 public class FileUtil {
     
-    public static File file(File file, Object... segments) {
+    /**
+     * Creates a file instance navigating forward from a root
+     * @param root
+     * @param segments
+     * @return
+     */
+    public static File file(File root, Object... segments) {
         for (Object segment : segments) {
-            file = new File(file, segment.toString());
+            root = new File(root, segment.toString());
         }
-        return file;
+        return root;
     }
     
+    /**
+     * Puts a list of file paths in a string separated by a path separator (e.g. a semicolon)
+     * @param files
+     * @return
+     */
     public static String stringify(List<File> files) {
-        return String.join(File.pathSeparator, files.stream()
+        return files.stream()
             .map(File::getAbsolutePath)
-            .collect(Collectors.toList()));
+            .collect(Collectors.joining(File.pathSeparator));
     }
 
 }

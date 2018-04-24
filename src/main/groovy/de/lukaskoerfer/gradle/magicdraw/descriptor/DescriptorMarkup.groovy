@@ -4,12 +4,19 @@ import groovy.transform.CompileStatic
 import groovy.transform.Immutable
 import groovy.xml.MarkupBuilder
 
+/**
+ * Writes a MagicDraw plugin descriptor to an XML file
+ */
 @CompileStatic
 @Immutable
 class DescriptorMarkup {
 
     private Descriptor descriptor
 
+    /**
+     * Writes the plugin descriptor to the given markup builder
+     * @param xml A XML markup builder
+     */
     void writeTo(MarkupBuilder xml) {
         // Setup markup builder
         xml.with {

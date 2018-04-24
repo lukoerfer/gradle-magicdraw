@@ -23,8 +23,9 @@ import static de.lukaskoerfer.gradle.magicdraw.util.FileUtil.file;
 /**
  * The MagicDraw plugin
  */
-@SuppressWarnings("WeakerAccess")
 public class MagicDrawPlugin implements Plugin<Project> {
+    
+    private Project project;
     
     public static final String MAGICDRAW_GROUP_NAME = "MagicDraw";
     
@@ -35,20 +36,32 @@ public class MagicDrawPlugin implements Plugin<Project> {
     
     public static final String MAGICDRAW_CONFIGURATION = "magicDraw";
     
+    /**
+     * Applies the MagicDraw plugin to a Gradle project
+     * @param project A Gradle project
+     */
     @Override
     public void apply(Project project) {
-        setupConfigurations(project);
-        createTasks(project);
-        registerExtensions(project);
-        configureAssembleTask(project);
-        configureInstallationTasks(project);
+        this.project = project;
+        setupConfiguration();
+        createTasks();
+        registerExtensions();
+        configureAssembleTask();
+        configureInstallationTasks();
         // Integrate distribution plugin
         project.getPluginManager().withPlugin("distribution", plugin -> {
-            setupDistributionPlugin(project);
+            setupDistributionPlugin();
         });
     }
     
-    private void createTasks(Project project) {
+    private void setupConfiguration() {
+        Configuration magicDrawApi = project.getConfigurations()
+            .create(MAGICDRAW_CONFIGURATION);
+        project.getConfigurations().getAt(JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAME)
+            .extendsFrom(magicDrawApi);
+    }
+    
+    private void createTasks() {
         AssembleMagicDrawPlugin assemblePlugin = project.getTasks()
             .create(ASSEMBLE_PLUGIN_TASK_NAME, AssembleMagicDrawPlugin.class);
         Copy installPlugin = project.getTasks()
@@ -65,21 +78,14 @@ public class MagicDrawPlugin implements Plugin<Project> {
         });
     }
     
-    private void setupConfigurations(Project project) {
-        Configuration magicDrawApi = project.getConfigurations()
-            .create(MAGICDRAW_CONFIGURATION);
-        project.getConfigurations().getAt(JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAME)
-            .extendsFrom(magicDrawApi);
-    }
-    
-    private void registerExtensions(Project project) {
+    private void registerExtensions() {
         project.getExtensions().create("magicDraw", MagicDrawExtension.class, project);
         AssembleMagicDrawPlugin assemblePlugin = project.getTasks()
             .withType(AssembleMagicDrawPlugin.class).getAt(ASSEMBLE_PLUGIN_TASK_NAME);
         project.getConvention().add("mdDescriptor", assemblePlugin.getDescriptor());
     }
     
-    private void configureAssembleTask(Project project) {
+    private void configureAssembleTask() {
         AssembleMagicDrawPlugin assemblePlugin = project.getTasks()
             .withType(AssembleMagicDrawPlugin.class).getAt(ASSEMBLE_PLUGIN_TASK_NAME);
         Descriptor descriptor = assemblePlugin.getDescriptor();
@@ -91,7 +97,7 @@ public class MagicDrawPlugin implements Plugin<Project> {
         assemblePlugin.exclude(element -> magicDrawApi.contains(element.getFile()));
     }
     
-    private void configureInstallationTasks(Project project) {
+    private void configureInstallationTasks() {
         MagicDrawExtension magicDraw = project.getExtensions()
             .getByType(MagicDrawExtension.class);
         AssembleMagicDrawPlugin assemblePlugin = project.getTasks()
@@ -108,7 +114,7 @@ public class MagicDrawPlugin implements Plugin<Project> {
         uninstallPlugin.delete(installationTarget);
     }
     
-    private void setupDistributionPlugin(Project project) {
+    private void setupDistributionPlugin() {
         AssembleMagicDrawPlugin assemblePlugin = project.getTasks()
             .withType(AssembleMagicDrawPlugin.class).getAt(ASSEMBLE_PLUGIN_TASK_NAME);
         Distribution mainDistribution = project.getExtensions()

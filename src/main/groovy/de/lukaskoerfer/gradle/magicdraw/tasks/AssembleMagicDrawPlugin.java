@@ -15,31 +15,34 @@ import java.io.PrintWriter;
 import java.io.Writer;
 
 /**
- * Task type to assemble all components of a MagicDraw plugin and create the descriptor file
+ * Provides a task type to assemble all components of a MagicDraw plugin and create the descriptor file
  */
 public class AssembleMagicDrawPlugin extends Sync {
     
+    /**
+     * Provides the descriptor file
+     */
     @OutputFile
     File file;
     
+    /**
+     * Gets the descriptor information for configuration
+     */
     @Getter
     private Descriptor descriptor = new Descriptor();
     
+    /**
+     * Creates a new MagicDraw assemble task
+     */
     public AssembleMagicDrawPlugin() {
-        preSetup();
-        getProject().afterEvaluate($ -> finalSetup());
-    }
-    
-    private void preSetup() {
         getConvention().add("descriptor", descriptor);
         getInputs().file(getProject().getBuildFile());
         eachFile(file -> descriptor.getLibraries().add(file.getPath()));
-        doLast($ -> createDescriptorFile());
-    }
-    
-    private void finalSetup() {
-        new DescriptorEvaluation(getProject(), descriptor).evaluate();
-        file = new File(getDestinationDir(), "plugin.xml");
+        doLast(task -> createDescriptorFile());
+        getProject().afterEvaluate(project -> {
+            new DescriptorEvaluation(getProject(), descriptor).evaluate();
+            file = new File(getDestinationDir(), "plugin.xml");
+        });
     }
     
     @SneakyThrows(IOException.class)

@@ -26,7 +26,11 @@ public class MagicDrawExtension {
      */
     @Getter @Setter
     private File installDir;
-
+    
+    /**
+     * Creates a new MagicDrawExtension
+     * @param project The Gradle project instance
+     */
     public MagicDrawExtension(Project project) {
         if (project.hasProperty(INSTALL_DIR_PROPERTY)) {
             installDir = project.file(project.property(INSTALL_DIR_PROPERTY));
