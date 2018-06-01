@@ -67,8 +67,8 @@ public class LaunchMagicDraw extends JavaExec {
             systemProperty("esi.system.config", file(root, "data", "application.conf"));
             systemProperty("logback.configurationFile", file(root, "data", "logback.xml"));
             // Specify plugin directories
-            Copy assemblePlugin = getProject().getTasks()
-                .withType(Copy.class).getAt(MagicDrawPlugin.ASSEMBLE_PLUGIN_TASK_NAME);
+            AssembleMagicDrawPlugin assemblePlugin = getProject().getTasks()
+                .withType(AssembleMagicDrawPlugin.class).getAt(MagicDrawPlugin.ASSEMBLE_PLUGIN_TASK_NAME);
             dependsOn(assemblePlugin);
             pluginDirs.add(file(root, "plugins"));
             pluginDirs.add(assemblePlugin.getDestinationDir().getParentFile());
