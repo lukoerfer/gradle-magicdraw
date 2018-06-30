@@ -1,6 +1,7 @@
 plugins {
     id 'groovy'
     id 'maven-publish'
+    id 'de.lukaskoerfer.gradle.delombok' version '0.2'
     id 'com.gradle.plugin-publish' version '0.9.10'
 }
 
@@ -15,6 +16,11 @@ dependencies {
     compile gradleApi()
     compile localGroovy()
     compileOnly 'org.projectlombok:lombok:1.16.18'
+}
+
+javadoc {
+    source = delombok
+    destinationDir = file('docs/javadoc')
 }
 
 publishing {

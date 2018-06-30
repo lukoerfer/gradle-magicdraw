@@ -3,7 +3,7 @@ package de.lukaskoerfer.gradle.magicdraw.descriptor
 import groovy.xml.MarkupBuilder
 
 /**
- * Writes a MagicDraw plugin descriptor to an XML builder
+ * Writes MagicDraw plugin descriptors to XML files
  */
 class DescriptorMarkup {
 

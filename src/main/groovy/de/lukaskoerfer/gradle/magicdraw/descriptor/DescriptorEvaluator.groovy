@@ -4,7 +4,7 @@ import org.gradle.api.InvalidUserDataException
 import org.gradle.api.Project
 
 /**
- * Evaluates a MagicDraw plugin descriptor
+ * Evaluates MagicDraw plugin descriptors
  */
 class DescriptorEvaluator {
 
