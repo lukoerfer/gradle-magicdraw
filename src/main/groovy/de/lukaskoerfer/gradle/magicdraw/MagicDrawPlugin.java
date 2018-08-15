@@ -4,7 +4,6 @@ import de.lukaskoerfer.gradle.magicdraw.descriptor.MagicDrawPluginDescriptor;
 import de.lukaskoerfer.gradle.magicdraw.extensions.MagicDrawExtension;
 import de.lukaskoerfer.gradle.magicdraw.tasks.AssembleMagicDrawPlugin;
 import de.lukaskoerfer.gradle.magicdraw.tasks.LaunchMagicDraw;
-import groovy.lang.GroovyCallable;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.distribution.Distribution;
@@ -17,7 +16,7 @@ import org.gradle.api.tasks.Delete;
 import java.util.stream.Stream;
 
 /**
- * The MagicDraw plugin
+ * The Gradle MagicDraw plugin
  */
 public class MagicDrawPlugin implements Plugin<Project> {
     

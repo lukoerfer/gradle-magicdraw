@@ -17,21 +17,31 @@ public class MagicDrawExtension {
     private static final String INSTALL_DIR_PROPERTY = "magicDraw.installDir";
     
     /**
-     * The MagicDraw installation directory
-     * <p>
-     * A default value can be set via the project property 'magicDraw.installDir'.
+     * -- GETTER --
+     * Gets the MagicDraw installation directory.
+     * <p>A default value can be set via the project property <code>magicDraw.installDir</code>.
+     * It is <b>required</b> to specify this property either directly or via the project property.
+     * If this property has not been set until the end of the <i>configuration phase</i>, the build will fail.</p>
+     * @return The previously set installation directory or the default value or null, if neither has been set
+     * -- SETTER --
+     * Sets the MagicDraw installation directory.
+     * <p>A default value can be set via the project property <code>magicDraw.installDir</code>.
+     * It is <b>required</b> to specify this property either directly or via the project property.
+     * If this property has not been set until the end of the <i>configuration phase</i>, the build will fail.</p>
+     * @param installDir The base directory of the MagicDraw installation
      */
     @Getter @Setter
     private DirectoryProperty installDir;
     
     /**
-     *
+     * Gets a container for MagicDraw plugin descriptors
+     * @return A MagicDraw plugin descriptor container
      */
     @Getter
     private final SinglePluginDescriptorContainer plugins;
     
     /**
-     * Creates a new MagicDrawExtension
+     * Creates a new extension for MagicDraw plugin settings
      * @param project The Gradle project instance
      */
     public MagicDrawExtension(Project project) {

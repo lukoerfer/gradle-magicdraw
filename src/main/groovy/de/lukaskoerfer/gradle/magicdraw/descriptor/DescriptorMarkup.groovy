@@ -8,7 +8,8 @@ import groovy.xml.MarkupBuilder
 class DescriptorMarkup {
 
     /**
-     * Writes the plugin descriptor to the given markup builder
+     * Writes a plugin descriptor to a XML markup builder
+     * @param descriptor A MagicDraw plugin descriptor
      * @param xml A XML markup builder
      */
     static void write(MagicDrawPluginDescriptor descriptor, MarkupBuilder xml) {

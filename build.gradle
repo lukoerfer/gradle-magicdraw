@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'de.lukaskoerfer.gradle'
-version '0.1'
+version '0.2'
 
 repositories {
     jcenter()
@@ -20,6 +20,8 @@ dependencies {
 
 javadoc {
     source = delombok
+    options.links 'https://docs.oracle.com/javase/8/docs/api/',
+        'https://docs.gradle.org/current/javadoc/'
     destinationDir = file('docs/javadoc')
 }
 

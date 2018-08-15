@@ -13,7 +13,7 @@ class DescriptorEvaluator {
     }
 
     /**
-     * Executes the evaluation of the plugin descriptor
+     * Evaluates a MagicDraw plugin descriptor against a Gradle project
      */
     static void evaluate(MagicDrawPluginDescriptor descriptor, Project project) {
         descriptor.id = descriptor.id ?: project.group ?: missing('id')

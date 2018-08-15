@@ -15,24 +15,33 @@ public class LaunchMagicDraw extends JavaExec {
     
     /**
      * -- GETTER --
-     * Gets whether MagicDraw should be launched in verbose mode (more detailed console output)
+     * Gets whether MagicDraw should be launched in verbose mode (more detailed console output).
+     * <p>Defaults to true</p>
+     * @return The previously set value or true, if it has not been set
      * -- SETTER --
-     * Sets whether MagicDraw should be launched in verbose mode (more detailed console output)
+     * Sets whether MagicDraw should be launched in verbose mode (more detailed console output).
+     * <p>Defaults to true</p>
+     * @param verbose True to launch in verbose mode, false otherwise
      */
     @Getter @Setter
     private boolean verbose = true;
     
     /**
      * -- GETTER --
-     * Gets whether MagicDraw should be launched with a local configuration file
+     * Gets whether MagicDraw should be launched with a local configuration file.
+     * <p>Defaults to true</p>
+     * @return The previously set value or true, if it has not been set
      * -- SETTER --
-     * Sets whether MagicDraw should be launched with a local configuration file
+     * Sets whether MagicDraw should be launched with a local configuration file.
+     * <p>Defaults to true</p>
+     * @param localConfig True to launch in with a local configuration file, false otherwise
      */
     @Getter @Setter
     private boolean localConfig = true;
     
     /**
-     * Gets the list of directories where MagicDraw should search for plugins
+     * Gets the list of directories where MagicDraw should search for plugins.
+     * @return A modifiable and lazy-evaluated file collection
      */
     @Getter
     private ConfigurableFileCollection pluginDirs = getProject().files();
