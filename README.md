@@ -17,7 +17,7 @@ The plugin does not require any other plugin. No other plugin will be applied au
 
 ## Usage
 
-#### Configuration
+### Configuration
 
 Once the plugin is applied, it can be configured via the `magicDraw` closure:
 
@@ -49,7 +49,17 @@ The *provider* property will default to the system property `user.name`, if not 
 
 > When leaving out the properties *id* and *version* to use the Gradle properties `project.group` and `project.version`, it is necessary to specify those Gradle properties, otherwise the build will fail.
 
-#### Tasks
+### Dependencies
+
+All MagicDraw libraries and their dependencies are provided in a single Gradle configuration called `magicDraw`. To use these dependencies in compilation or to import them into an IDE, it may required to extend another configuration like `compileOnly`:
+
+    configurations {
+        compileOnly.extendsFrom magicDraw
+    }
+
+The `compileOnly` configuration is used to prevent the MagicDraw dependencies from being carried around with the project, as they are available with any MagicDraw installation. Of course, it is possible to use other configurations like `compile` or `implementation` and to manually take care, e.g. when creating a "fat" jar.
+
+### Tasks
 
 The Gradle MagicDraw plugin will create the following tasks:
 
@@ -68,7 +78,6 @@ By default, the `assemblePlugin` task does not collect any files, so it is requi
 The example above can be used when using the `java` plugin. To include any dependencies, it is required to add the runtime classpath, too:
 
     assemblePlugin {
-         from jar
          from configurations.runtime
     }
 
