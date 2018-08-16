@@ -78,6 +78,7 @@ By default, the `assemblePlugin` task does not collect any files, so it is requi
 The example above can be used when using the `java` plugin. To include any dependencies, it is required to add the runtime classpath, too:
 
     assemblePlugin {
+         from jar
          from configurations.runtime
     }
 
