@@ -10,7 +10,7 @@ This plugin tries to provide a set of tools to simplify the development of plugi
 The plugin is available via the [Gradle plugin portal](https://plugins.gradle.org/plugin/de.lukaskoerfer.gradle.magicdraw). Simply use the `plugins` block to apply the plugin to your project:
 
     plugins {
-        id 'de.lukaskoerfer.gradle.magicdraw' version '0.2'
+        id 'de.lukaskoerfer.gradle.magicdraw' version '0.2.1'
     }
 
 The plugin does not require any other plugin. No other plugin will be applied automatically.
