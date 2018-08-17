@@ -1,13 +1,11 @@
 package de.lukaskoerfer.gradle.magicdraw.tasks;
 
-import de.lukaskoerfer.gradle.magicdraw.MagicDrawPlugin;
 import de.lukaskoerfer.gradle.magicdraw.descriptor.DescriptorEvaluator;
 import de.lukaskoerfer.gradle.magicdraw.descriptor.DescriptorMarkup;
 import de.lukaskoerfer.gradle.magicdraw.descriptor.MagicDrawPluginDescriptor;
 import de.lukaskoerfer.gradle.magicdraw.extensions.MagicDrawExtension;
 import groovy.xml.MarkupBuilder;
 import lombok.SneakyThrows;
-import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.tasks.Sync;
 
 import java.io.File;
@@ -36,10 +34,7 @@ public class AssembleMagicDrawPlugin extends Sync {
     }
     
     private void setupAssemble() {
-        Configuration magicDrawApi = getProject().getConfigurations()
-            .getAt(MagicDrawPlugin.MAGICDRAW_CONFIGURATION);
         into(getProject().getLayout().getBuildDirectory().dir("magicdraw"));
-        exclude(element -> magicDrawApi.contains(element.getFile()));
         eachFile(file -> {
             String path = file.getPath();
             descriptor.getLibraries().add(path);

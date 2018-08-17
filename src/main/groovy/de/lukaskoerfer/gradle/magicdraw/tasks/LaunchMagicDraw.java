@@ -58,7 +58,7 @@ public class LaunchMagicDraw extends JavaExec {
         jvmArgs("-Xss1024K", "-Xmx2000M");
         systemProperty("md.class.path", "$java.class.path");
         MagicDrawExtension magicDraw = getProject().getExtensions().getByType(MagicDrawExtension.class);
-        pluginDirs.from(magicDraw.getInstallDir().dir("plugin"));
+        pluginDirs.from(magicDraw.getInstallDir().dir("plugins"));
         getProject().afterEvaluate(project -> evaluate());
     }
     
@@ -80,9 +80,9 @@ public class LaunchMagicDraw extends JavaExec {
     
     private void setupPluginDirs() {
         AssembleMagicDrawPlugin assemblePlugin = getProject().getTasks()
-            .withType(AssembleMagicDrawPlugin.class).getAt(MagicDrawPlugin.ASSEMBLE_PLUGIN_TASK_NAME);
+            .withType(AssembleMagicDrawPlugin.class).getAt(MagicDrawPlugin.ASSEMBLE_PLUGIN_TASK);
         dependsOn(assemblePlugin);
-        pluginDirs.from(assemblePlugin.getDestinationDir().getParentFile());
+        pluginDirs.from(assemblePlugin.getDestinationDir());
         systemProperty("md.plugins.dir", pluginDirs.getAsPath());
     }
     
