@@ -57,6 +57,12 @@ All MagicDraw libraries and their dependencies are provided in a single Gradle c
         compileOnly.extendsFrom magicDraw
     }
 
+Another possible syntax is using a dependency:
+
+    dependencies {
+        compileOnly configurations.magicDraw
+    }
+
 The `compileOnly` configuration is used to prevent the MagicDraw dependencies from being carried around with the project, as they are available with any MagicDraw installation. Of course, it is possible to use other configurations like `compile` or `implementation` and to manually take care, e.g. when creating a "fat" jar.
 
 ### Tasks
