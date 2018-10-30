@@ -1,4 +1,4 @@
-# gradle-magicdraw
+# Gradle MagicDraw Plugin
 Gradle plugin to develop plugins for MagicDraw
 
 ## Motivation
