@@ -9,9 +9,11 @@ This plugin tries to provide a set of tools to simplify the development of plugi
 ## Download
 The plugin is available via the [Gradle plugin portal](https://plugins.gradle.org/plugin/de.lukaskoerfer.gradle.magicdraw). Simply use the `plugins` block to apply the plugin to your project:
 
-    plugins {
-        id 'de.lukaskoerfer.gradle.magicdraw' version '0.2.1'
-    }
+``` gradle
+plugins {
+    id 'de.lukaskoerfer.gradle.magicdraw' version '0.2.1'
+}
+```
 
 The plugin does not require any other plugin. No other plugin will be applied automatically.
 
@@ -21,18 +23,20 @@ The plugin does not require any other plugin. No other plugin will be applied au
 
 Once the plugin is applied, it can be configured via the `magicDraw` closure:
 
-    magicDraw {
-        installDir = file('C:/MagicDraw')
-        plugins {
-            main {
-                id = 'my.plugin.id'
-                version = '1.2.3'
-                label = 'My plugin'
-                className = 'package.path.to.PluginClass'
-                provider = 'John Doe'
-            }
+``` gradle
+magicDraw {
+    installDir = file('C:/MagicDraw')
+    plugins {
+        main {
+            id = 'my.plugin.id'
+            version = '1.2.3'
+            label = 'My plugin'
+            className = 'package.path.to.PluginClass'
+            provider = 'John Doe'
         }
     }
+}
+```
 
 The most important configuration parameter is called `installDir` and must be set to the installation directory of MagicDraw.
 
@@ -53,15 +57,19 @@ The *provider* property will default to the system property `user.name`, if not 
 
 All MagicDraw libraries and their dependencies are provided in a single Gradle configuration called `magicDraw`. To use these dependencies in compilation or to import them into an IDE, it may required to extend another configuration like `compileOnly`:
 
-    configurations {
-        compileOnly.extendsFrom magicDraw
-    }
+``` gradle
+configurations {
+    compileOnly.extendsFrom magicDraw
+}
+```
 
 Another possible syntax is using a dependency:
 
-    dependencies {
-        compileOnly configurations.magicDraw
-    }
+``` gradle
+dependencies {
+    compileOnly configurations.magicDraw
+}
+```
 
 The `compileOnly` configuration is used to prevent the MagicDraw dependencies from being carried around with the project, as they are available with any MagicDraw installation. Of course, it is possible to use other configurations like `compile` or `implementation` and to manually take care, e.g. when creating a "fat" jar.
 
@@ -77,22 +85,28 @@ The Gradle MagicDraw plugin will create the following tasks:
 To let the Gradle MagicDraw plugin provide the highest possible amount of flexibility, it is not linked or integrated with any other plugin like the `java` plugin.
 By default, the `assemblePlugin` task does not collect any files, so it is required to register any library files that are used to implement the plugin, e.g.:
 
-    assemblePlugin {
-         from jar
-    }
-    
+``` gradle
+assemblePlugin {
+    from jar
+}
+```
+
 The example above can be used when using the `java` plugin. To include any dependencies, it is required to add the runtime classpath, too:
 
-    assemblePlugin {
-         from jar
-         from configurations.runtime
-    }
+``` gradle
+assemblePlugin {
+    from jar
+    from configurations.runtime
+}
+```
 
 Instead of passing all dependencies manually, it is also possible to use the [`com.github.johnrengelman.shadow`](https://github.com/johnrengelman/shadow) plugin and create a "fat" jar:
 
-    assemblePlugin {
-        from shadowJar
-    }
+``` gradle
+assemblePlugin {
+    from shadowJar
+}
+```
 
 ## License
 The software is licensed under the [MIT license](https://github.com/lukoerfer/gradle-magicdraw/blob/master/LICENSE).
