@@ -4,6 +4,7 @@ import de.lukaskoerfer.gradle.magicdraw.descriptor.MagicDrawPluginDescriptor;
 import de.lukaskoerfer.gradle.magicdraw.extensions.MagicDrawExtension;
 import de.lukaskoerfer.gradle.magicdraw.tasks.AssembleMagicDrawPlugin;
 import de.lukaskoerfer.gradle.magicdraw.tasks.LaunchMagicDraw;
+import org.gradle.api.NonNullApi;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.provider.Provider;
@@ -71,12 +72,11 @@ public class MagicDrawPlugin implements Plugin<Project> {
         MagicDrawPluginDescriptor descriptor = magicDraw.getPlugins().getMain();
         Copy installPlugin = project.getTasks()
             .withType(Copy.class).getAt(INSTALL_PLUGIN_TASK);
-        Delete uninstallPlugin = project.getTasks()
-            .withType(Delete.class).getAt(UNINSTALL_PLUGIN_TASK);
         installPlugin.from(assemblePlugin);
         installPlugin.into(magicDraw.getInstallDir().dir("plugins"));
-        Provider<String> pluginDir = project.getProviders()
-            .provider(() -> "plugins/" + descriptor.getId());
+        Delete uninstallPlugin = project.getTasks()
+            .withType(Delete.class).getAt(UNINSTALL_PLUGIN_TASK);
+        Provider<String> pluginDir = project.getProviders().provider(() -> "plugins/" + descriptor.getId());
         uninstallPlugin.delete(magicDraw.getInstallDir().dir(pluginDir));
     }
 

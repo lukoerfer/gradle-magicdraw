@@ -15,7 +15,7 @@ public class SinglePluginDescriptorContainer {
      * @return A MagicDraw plugin descriptor with the internal name <i>main</i>
      */
     @Getter
-    private MagicDrawPluginDescriptor main;
+    private final MagicDrawPluginDescriptor main;
     
     /**
      * Creates a new MagicDraw plugin descriptor container that only stores a single plugin descriptor called <i>main</i>.

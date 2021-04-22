@@ -46,7 +46,7 @@ public class MagicDrawExtension {
      */
     public MagicDrawExtension(Project project) {
         plugins = asExtensionAware().getExtensions().create("plugins", SinglePluginDescriptorContainer.class);
-        installDir = project.getLayout().directoryProperty();
+        installDir = project.getObjects().directoryProperty();
         if (project.hasProperty(INSTALL_DIR_PROPERTY)) {
             installDir.set(project.file(project.property(INSTALL_DIR_PROPERTY)));
         }
