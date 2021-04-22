@@ -11,7 +11,7 @@ The plugin is available via the [Gradle plugin portal](https://plugins.gradle.or
 
 ``` gradle
 plugins {
-    id 'de.lukaskoerfer.gradle.magicdraw' version '0.2.1'
+    id 'de.lukaskoerfer.gradle.magicdraw' version '0.3'
 }
 ```
 
